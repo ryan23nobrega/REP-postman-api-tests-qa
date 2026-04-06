@@ -1,3 +1,5 @@
+[![Postman Tests](https://github.com/ryan23nobrega/REP-postman-api-tests-qa/actions/workflows/main.yml/badge.svg)](https://github.com/ryan23nobrega/REP-postman-api-tests-qa/actions)
+
 # 🧪 Postman API Tests - Fake Store
 
 Projeto de testes de API utilizando Postman para simular cenários reais de QA.
