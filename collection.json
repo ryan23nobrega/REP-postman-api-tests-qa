@@ -134,7 +134,14 @@
               "script": {
                 "exec": [
                   "pm.test(\"Status code is valid\", function () {\r",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 403]);\r",
+                  "    const validCodes = [200, 201];\r",
+                  "\r",
+                  "    if (!validCodes.includes(pm.response.code)) {\r",
+                  "        console.log(\"Erro inesperado:\", pm.response.code);\r",
+                  "        console.log(\"Resposta:\", pm.response.text());\r",
+                  "    }\r",
+                  "\r",
+                  "    pm.expect(validCodes).to.include(pm.response.code);\r",
                   "});\r",
                   "\r",
                   "if (pm.response.code === 200 || pm.response.code === 201) {\r",
@@ -162,10 +169,6 @@
                   "\r",
                   "    pm.environment.set(\"product_id\", responseJson.id);\r",
                   "    pm.environment.set(\"created_product_title\", responseJson.title);\r",
-                  "} else {\r",
-                  "    pm.test(\"API may return 403 in CI environment\", function () {\r",
-                  "        pm.expect(pm.response.code).to.eql(403);\r",
-                  "    });\r",
                   "}"
                 ],
                 "type": "text/javascript",
