@@ -3,6 +3,8 @@ name: Run Postman Tests
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   test:
@@ -12,8 +14,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install Newman and HTML Reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Create reports folder
+        run: mkdir -p reports
 
       - name: Run Postman collection
-        run: newman run collection.json -e environment.json
+        run: |
+          newman run collection.json -e environment.json \
+          -r cli,htmlextra \
+          --reporter-htmlextra-export reports/postman-report.html
+
+      - name: Upload Newman HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: postman-html-report
+          path: reports/postman-report.html
